@@ -35,6 +35,10 @@ public class Rocket {
         this.accl = new Vector(0,0);
     }
     
+    public void fuel(int strength, long durationMilis) {
+        applyForce(new AppliedForce(strength, durationMilis));
+    }
+    
     public void applyForce(AppliedForce force) {
         forces.add(force);
     }
