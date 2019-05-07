@@ -9,7 +9,7 @@ public class Game extends JPanel implements MouseListener, KeyListener{
     private static int score;
     private static int time;
     private static double miliSec;
-    private static int fuel = 1000;
+    private static double fuel = 1000;
     public static boolean paused = true;
     private static boolean acc;
     private static int other;
@@ -63,6 +63,8 @@ public class Game extends JPanel implements MouseListener, KeyListener{
             other = 4;
         if(time>3599)
             other = 3;
+        if(acc)
+            fuel -= (10-rocket.acc)/1000;
     }
 
     public void paintComponent(Graphics g){
@@ -70,20 +72,20 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         g.setColor(Color.WHITE);
         if(other == 1){
             other = 0;
-            g.setFont(new Font("Arial", Font.PLAIN, 50));
             g.drawString("YOU WIN",50,475);
+            stop();
             return;
         }
         if(other == 2){
-            g.setFont(new Font("Arial", Font.PLAIN, 50));
             g.drawString("NO MORE FUEL",50,475);
             g.drawString("GAME OVER",50,525);
+            stop();
             return;
         }
         if(other == 3){
-            g.setFont(new Font("Arial", Font.PLAIN, 50));
             g.drawString("TIMES UP!",400,475);
             g.drawString("GAME OVER",375,525);
+            stop();
             return;
         }
         if(other == 5){
@@ -140,7 +142,7 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         s = "FUEL ";
         for(int k = 0; k<number; k++)
             s += "0";
-        s+= fuel;
+        s+= (int)fuel;
         g.drawString(s,20,100);
         int alt = (int)(880-rocket.pos);
         if(alt ==0)
@@ -201,16 +203,16 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         if(paused)
             return;
         int action = e.getKeyCode();
-        if(action == 40 && rocket.acc<10){
+        if(action == 40 && rocket.acc<10)
             rocket.acc++;
-            acc =true;
-        }
         else if(action == 40 && rocket.acc == 9){
             rocket.acc = 10;
             acc = false;
         }
-        else if(action == 38 && rocket.acc >-10)
+        else if(action == 38 && rocket.acc >-10){
             rocket.acc--;
+            acc = true;
+        }
         stop();
         if(rocket.acc <= 9)
             play("./sound/CLevel 1.wav",true);
