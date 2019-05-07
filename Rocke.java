@@ -10,8 +10,6 @@ public class Rocke{
         pos+=vel/1000;
         if(pos >880){
             pos = 880;
-            if(vel >0)
-                vel = 0;
         }
     }
     public boolean touchingGround(){

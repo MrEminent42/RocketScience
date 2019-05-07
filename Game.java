@@ -11,10 +11,10 @@ public class Game extends JPanel implements MouseListener, KeyListener{
     private static double miliSec;
     private static int fuel = 1000;
     public static boolean paused = true;
-    private static boolean landed;
-    private static boolean crashed;
     private static boolean acc;
     private static int other;
+    private static AudioInputStream audioInputStream;
+    private static Clip clip;
     public Game(){
         rocket = new Rocke(200,0,10);
         setVisible(true);
@@ -23,6 +23,9 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         addMouseListener(this);
         addKeyListener(this);
         setPreferredSize(new Dimension(200,1000));
+        try{
+            clip = AudioSystem.getClip();
+        }catch(Exception e){}
         timer = new Timer(1, new ActionListener(){
                 @Override
                 public void actionPerformed(ActionEvent e){
@@ -41,11 +44,16 @@ public class Game extends JPanel implements MouseListener, KeyListener{
     public void check(){
         if(rocket.touchingGround() && !paused){
             paused = true;
-            rocket = new Rocke(200,0,-1);
-            if(rocket.vel < 10)
+            if(rocket.vel < 10){
+                stop();
+                play("./sound/rocket_landing.wav",false);
                 other = 5;
-            else
+            }else{
+                stop();
+                play("./sound/rocket_crashing.wav",false);
                 other = 6;
+            }
+            rocket = new Rocke(200,0,10);
         }
         if(score>9999)
             other = 1;
@@ -80,10 +88,12 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         }
         if(other == 5){
             g.drawString("YOU LANDED",50,450);
-            g.drawString("THE ROCKET",50,550);
+            g.drawString("THE ROCKET",50,500);
+            g.drawString("CLICK TO START",25,550);
         }else if(other == 6){
             g.drawString("YOU DESTROYED",50,450);
-            g.drawString("THE ROCKET",50,550);
+            g.drawString("THE ROCKET",50,500);
+            g.drawString("CLICK TO START",25,550);
         }else if(paused)
             g.drawString("CLICK TO START",25,475);
         else if(other == 4)
@@ -157,13 +167,33 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         frame.setVisible(true);
     }
 
+    public void play(String fileName, boolean xd){
+        try{
+            File file = new File(fileName);
+            audioInputStream = AudioSystem.getAudioInputStream(new File(fileName).getAbsoluteFile());
+            clip.open(audioInputStream);
+        }catch(IOException e){
+            e.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        if(xd)
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        clip.start();
+    }
+
+    public void stop(){
+        clip.stop();
+        clip.close();
+    }
+    
     @Override
     public void mouseClicked(MouseEvent e){
         if(!paused)
             return;
         paused = false;
-        landed = false;
-        crashed = false;
+        if(other == 5 || other == 6)
+            other = 0;
     }
 
     @Override
@@ -171,16 +201,27 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         if(paused)
             return;
         int action = e.getKeyCode();
-        if(action == 40 && rocket.acc<2){
+        if(action == 40 && rocket.acc<10){
             rocket.acc++;
             acc =true;
         }
-        else if(action == 38 && rocket.acc > 0)
-            rocket.acc--;
-        else if(action == 38 && rocket.acc == 0){
-            rocket.acc = -1;
+        else if(action == 40 && rocket.acc == 9){
+            rocket.acc = 10;
             acc = false;
         }
+        else if(action == 38 && rocket.acc >-10)
+            rocket.acc--;
+        stop();
+        if(rocket.acc <= 9)
+            play("./sound/CLevel 1.wav",true);
+        else if(rocket.acc <= 5)
+            play("./sound/CLevel 2.wav",true);
+        else if(rocket.acc <=1)
+            play("./sound/CLevel 3.wav",true);
+        else if(rocket.acc <= -3)
+            play("./sound/CLevel 4.wav",true);
+        else if(rocket.acc <= -7)
+            play("./sound/CLevel 5.wav",true);
     }
 
     @Override public void mouseEntered(MouseEvent e){}
