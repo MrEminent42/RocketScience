@@ -1,6 +1,6 @@
 public class Rockett{
     public double a;
-    public int x,y,xVel,yVel,xAcc,yAcc;
+    public double x,y,xVel,yVel,xAcc,yAcc;
     public Rockett(){
         a = Math.random()*Math.PI*2;
         x = 100;
