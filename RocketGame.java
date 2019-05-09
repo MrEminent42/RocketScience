@@ -1,14 +1,15 @@
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class RocketGame {
 	
-	public static final int crashVelocity = 2;
+	public static final int crashVelocity = 3;
 	public static final int refreshPerSecond = 1000;
     public static final double GRAVITY = -0.01/((double) refreshPerSecond);
     public static final double velPerFuelLevel = 0.0025;
     
-    Rocket rocket;
+    private Rocket rocket;
     RocketScreen screen;
     Timer updateTask;
     long startMilis;
@@ -19,8 +20,12 @@ public class RocketGame {
     private boolean outOfFuel = false;
     
     public RocketGame() {
-        this.rocket = new Rocket();
-        this.screen = new RocketScreen(this);
+    	this(new ArrayList<TimedFuel>());
+    }
+    
+    public RocketGame(ArrayList<TimedFuel> fuelQueue) {
+        this.rocket = new Rocket(fuelQueue);
+        this.screen = new RocketScreen(this, 100);
         
         this.screen.update();
         this.screen.displayText("Click to play");
@@ -69,11 +74,18 @@ public class RocketGame {
         	paused = true;
         	updateTask.cancel();
     		outOfFuel = true;
-    		screen.displayText("You ran out of fuel!");
+    		screen.displayText("Out of fuel!");
     	}
     	
     }
     
+    public Rocket getRocket() {
+    	return this.rocket;
+    }
+    
+    public RocketScreen getScreen() {
+    	return this.screen;
+    }
     
     // FINAL GAME STATES \\
     

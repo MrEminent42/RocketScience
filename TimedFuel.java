@@ -1,13 +1,22 @@
 public class TimedFuel {
     
-    long startTimeMilis;
+    long startTimeMilis = -1;
     long finishTimeMilis;
+    long duration;
     int level;
     
     public TimedFuel(int level, long duration) {
         this.level = level;
-        this.startTimeMilis = System.currentTimeMillis();
-        this.finishTimeMilis = this.startTimeMilis + duration;
+        this.duration = duration;
+    }
+    
+    public void start() {
+    	this.startTimeMilis = System.currentTimeMillis();
+    	this.finishTimeMilis = startTimeMilis + this.duration;
+    }
+    
+    public boolean hasStarted() {
+    	return startTimeMilis != -1;
     }
     
     public boolean isFinished() {

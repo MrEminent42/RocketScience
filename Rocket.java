@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Rocket {
     
-	double fuelTank = 1000;
+	double fuelTank = 200;
 	double fuelLevel = 0;
 	
     Vector pos;
@@ -12,11 +12,14 @@ public class Rocket {
     ArrayList<TimedFuel> fuelQueue;
     
     public Rocket() {
+        this(new ArrayList<TimedFuel>());
+    }
+    
+    public Rocket(ArrayList<TimedFuel> fuelQueue) {
         this.pos = new Vector(0, 100);
         this.accl = new Vector(0, 0);
         this.vel = new Vector(0, 0);
-        
-        this.fuelQueue = new ArrayList<TimedFuel>();
+        this.fuelQueue = fuelQueue;
     }
     
     public void update() {
@@ -26,10 +29,12 @@ public class Rocket {
         // set fuel level
         if (fuelQueue.size() > 0) {
         	TimedFuel f = fuelQueue.get(0);
-        	if (f.isFinished()) {
-        		fuelQueue.remove(f);
-        	} else {
+        	if (!f.hasStarted()) {
+        		f.start();
         		setFuelLevel(f.getLevel());
+        	} else if (f.isFinished()) {
+        		fuelQueue.remove(f);
+        		setFuelLevel(0);
         	}
         }
         
@@ -58,15 +63,15 @@ public class Rocket {
     }
     
     public void addFuelToQueue(int strength, long durationMilis) {
-    	addTimedFuel(new TimedFuel(strength, durationMilis));
+    	addTimedFuelToQueue(new TimedFuel(strength, durationMilis));
+    }
+    
+    public void addTimedFuelToQueue(TimedFuel f) {
+    	fuelQueue.add(f);
     }
     
     public void setFuelLevel(int level) {
     	this.fuelLevel = level;
-    }
-    
-    private void addTimedFuel(TimedFuel f) {
-    	fuelQueue.add(f);
     }
     
 }
