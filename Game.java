@@ -204,13 +204,13 @@ public class Game extends JPanel implements MouseListener, KeyListener{
             return;
         int action = e.getKeyCode();
         if(action == 40 && rocket.acc<10)
-            rocket.acc++;
-        else if(action == 40 && rocket.acc == 9){
+            rocket.acc+= 2.5;
+        else if(action == 40 && rocket.acc == 7.5){
             rocket.acc = 10;
             acc = false;
         }
         else if(action == 38 && rocket.acc >-10){
-            rocket.acc--;
+            rocket.acc-= 2.5;
             acc = true;
         }
         stop();
