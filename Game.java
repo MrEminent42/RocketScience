@@ -11,7 +11,6 @@ public class Game extends JPanel implements MouseListener, KeyListener{
     private static double miliSec;
     private static double fuel = 1000;
     public static boolean paused = true;
-    private static boolean acc;
     private static int other;
     private static AudioInputStream audioInputStream;
     private static Clip clip;
@@ -63,8 +62,7 @@ public class Game extends JPanel implements MouseListener, KeyListener{
             other = 4;
         if(time>3599)
             other = 3;
-        if(acc)
-            fuel -= (10-rocket.acc)/1000;
+        fuel -= (10-rocket.acc)/1000;
     }
 
     public void paintComponent(Graphics g){
@@ -205,14 +203,10 @@ public class Game extends JPanel implements MouseListener, KeyListener{
         int action = e.getKeyCode();
         if(action == 40 && rocket.acc<10)
             rocket.acc+= 2.5;
-        else if(action == 40 && rocket.acc == 7.5){
+        else if(action == 40 && rocket.acc == 7.5)
             rocket.acc = 10;
-            acc = false;
-        }
-        else if(action == 38 && rocket.acc >-10){
+        else if(action == 38 && rocket.acc >-10)
             rocket.acc-= 2.5;
-            acc = true;
-        }
         stop();
         if(rocket.acc <= 9)
             play("./sound/CLevel 1.wav",true);
