@@ -1,8 +1,9 @@
+package game;
 import java.util.ArrayList;
 
 public class Rocket {
     
-	double fuelTank = 200;
+	double fuelTank = RocketGame.startingRocketFuel;
 	double fuelLevel = 0;
 	
     Vector pos;
@@ -16,7 +17,7 @@ public class Rocket {
     }
     
     public Rocket(ArrayList<TimedFuel> fuelQueue) {
-        this.pos = new Vector(0, 100);
+        this.pos = RocketGame.startingRocketPos.copy();
         this.accl = new Vector(0, 0);
         this.vel = new Vector(0, 0);
         this.fuelQueue = fuelQueue;
@@ -54,8 +55,16 @@ public class Rocket {
     	return this.pos.y;
     }
     
+    public double getFuelTank() {
+    	return this.fuelTank;
+    }
+    
     public double getVelocityPerSecond() {
     	return this.vel.getMag()*RocketGame.refreshPerSecond;
+    }
+    
+    public double getVelocityPerRefresh() {
+    	return this.vel.getMag();
     }
     
     public boolean isTouchingGround() {

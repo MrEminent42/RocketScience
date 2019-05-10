@@ -1,3 +1,4 @@
+package game;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,6 +9,8 @@ public class RocketGame {
 	public static final int refreshPerSecond = 1000;
     public static final double GRAVITY = -0.01/((double) refreshPerSecond);
     public static final double velPerFuelLevel = 0.0025;
+    public static final int startingRocketFuel = 200;
+    public static final Vector startingRocketPos = new Vector(0, 100);
     
     private Rocket rocket;
     RocketScreen screen;
