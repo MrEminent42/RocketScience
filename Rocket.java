@@ -59,6 +59,10 @@ public class Rocket {
     	return this.fuelTank;
     }
     
+    public double getFuelLevel() {
+    	return this.fuelLevel;
+    }
+    
     public double getVelocityPerSecond() {
     	return this.vel.getMag()*RocketGame.refreshPerSecond;
     }

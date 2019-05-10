@@ -13,9 +13,9 @@ public class RocketGame {
     public static final Vector startingRocketPos = new Vector(0, 100);
     
     private Rocket rocket;
-    RocketScreen screen;
-    Timer updateTask;
-    long startMilis;
+    private RocketScreen screen;
+    private Timer updateTask;
+    private long startMilis;
     
     private boolean paused = false;
     private boolean crashed = false;
@@ -88,6 +88,14 @@ public class RocketGame {
     
     public RocketScreen getScreen() {
     	return this.screen;
+    }
+    
+    public void setScreen(RocketScreen screen) {
+    	this.screen = screen;
+    }
+    
+    public long getStartMilis() {
+    	return this.getStartMilis();
     }
     
     // FINAL GAME STATES \\
