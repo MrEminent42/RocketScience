@@ -9,13 +9,18 @@ public class RocketScreen {
 	protected RocketGame game;
 	protected String currentPicture;
 	
+	/**
+	 * Create a rocket screen
+	 * @param game RocketGame that contains this screen
+	 * @param size size between 0.001 and 100 (recommended: 0.5, 1, 2, 3)
+	 */
 	public RocketScreen(RocketGame game, double size) {
 		this.game = game;
 		
 		init(size);
 	}
 	
-	public void init(double size) {
+	protected void init(double size) {
 		StdDraw.setCanvasSize((int)(100*size), (int)(400*size+100));
 		
 		StdDraw.setXscale(-50, 50);
@@ -24,6 +29,9 @@ public class RocketScreen {
 		StdDraw.enableDoubleBuffering();
 	}
 	
+	/**
+	 * refresh the screen
+	 */
 	public void update() {
 		updatePictureFile();
 		
@@ -39,7 +47,7 @@ public class RocketScreen {
 		StdDraw.setPenColor((game.getRocket().getVelocityPerSecond() > 35) ? StdDraw.RED : (game.getRocket().getVelocityPerSecond() <= game.crashVelocity) ? StdDraw.GREEN :StdDraw.BLACK);
 		StdDraw.text(0, 410, "VEL   " + String.format("%03d", (int)(game.getRocket().getVelocityPerSecond())));
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.text(0, 395, "LEVL " + String.format("%03d", (int)(game.getRocket().fuelLevel)));
+		StdDraw.text(0, 395, "LEVL " + String.format("%03d", (int)(game.getRocket().currentFuelLevel)));
 		
 		StdDraw.show();
 		
@@ -48,7 +56,7 @@ public class RocketScreen {
 	
 	public void updatePictureFile() {
 		// scaling the 9 levels to 6 pictures (??)
-		int d = (int) (6 * game.getRocket().fuelLevel / 10);
+		int d = (int) (6 * game.getRocket().currentFuelLevel / 10);
 		
 		if (d < 1) {
 			this.currentPicture = "lvl1.png";
@@ -65,6 +73,9 @@ public class RocketScreen {
 		}
 	}
 	
+	/**
+	 * see if a button has been pressed
+	 */
 	public void checkButtonPress() {
 		if (StdDraw.isKeyPressed(KeyEvent.VK_0)) {
 			game.getRocket().setFuelLevel(0);
@@ -89,6 +100,10 @@ public class RocketScreen {
 		}
 	}
 	
+	/**
+	 * show text on the screen until the next refresh
+	 * @param text text to show
+	 */
 	public void displayText(String text) {
 		StdDraw.text(0, 200, text);
 		StdDraw.show();

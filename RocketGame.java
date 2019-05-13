@@ -23,21 +23,37 @@ public class RocketGame {
     private boolean landed = false;
     private boolean outOfFuel = false;
     
+    /**
+     * Create a rocket game with an empty fuel queue, and a screen
+     */
     public RocketGame() {
     	this(new ArrayList<TimedFuel>());
     }
     
-    public RocketGame(boolean screen) {
-    	this(new ArrayList<TimedFuel>(), screen);
+    /**
+     * Create a RocketGame with an empty fuel queue, and specify whether or not a screen should be created
+     * @param createScreen
+     */
+    public RocketGame(boolean createScreen) {
+    	this(new ArrayList<TimedFuel>(), createScreen);
     }
     
+    /**
+     * Create a RocketGame with a fuel queue and a screen
+     * @param fuelQueue list of TimedFuel to be executed in order
+     */
     public RocketGame(ArrayList<TimedFuel> fuelQueue) {
     	this(fuelQueue, true);
     }
     
-    public RocketGame(ArrayList<TimedFuel> fuelQueue, boolean screen) {
+    /** 
+     * Create a RocketGame with a fuel queue and specify whether or not a screen should be created
+     * @param fuelQueue list of TimedFuel to be executed in order
+     * @param createScreen
+     */
+    public RocketGame(ArrayList<TimedFuel> fuelQueue, boolean createScreen) {
         this.rocket = new Rocket(this, fuelQueue);
-        if (screen) initScreen();
+        if (createScreen) initScreen();
     }
     
     private void initScreen() {
@@ -46,6 +62,9 @@ public class RocketGame {
         this.screen.displayText("Click to play");
     }
     
+    /**
+     * Run the game
+     */
     public void start() {
     	this.startMilis = System.currentTimeMillis();
     	this.updateTask = new Timer();
@@ -59,15 +78,20 @@ public class RocketGame {
     	}, 1000/refreshPerSecond, 1000/refreshPerSecond);
     }
     
+    /**
+     * iterate
+     */
     public void update() {
     	if (this.paused) return;
         rocket.update();
-        screen.update();
+        if (screen != null) screen.update();
         
         checkFinishGame();
-        
     }
     
+    /**
+     * check if the game has finished & perform final tasks
+     */
     public void checkFinishGame() {
     	
     	// on the ground
@@ -77,10 +101,10 @@ public class RocketGame {
 	    	// if crashed
 	    	if (rocket.getVelocityPerSecond() > crashVelocity) {
 	    		crashed = true;
-	    		screen.displayText("You crashed!");
+	    		if (screen != null) screen.displayText("You crashed!");
 	    	} else {
 	    		landed = true;
-	    		screen.displayText("You landed!");
+	    		if (screen != null) screen.displayText("You landed!");
 	    	}
 	    	
 	    	finishMilis = System.currentTimeMillis();
@@ -91,31 +115,51 @@ public class RocketGame {
         	paused = true;
         	if (updateTask != null) updateTask.cancel();
     		outOfFuel = true;
-    		screen.displayText("Out of fuel!");
+    		if (screen != null) screen.displayText("Out of fuel!");
 	    	finishMilis = System.currentTimeMillis();
     	}
     }
     
+    /** 
+     * @return this game's rocket
+     */
     public Rocket getRocket() {
     	return this.rocket;
     }
     
+    /**
+     * @return this game's screen
+     */
     public RocketScreen getScreen() {
     	return this.screen;
     }
     
+    /**
+     * Set this game's screen 
+     * @param RocketScreen to use for this RocketGame
+     */
     public void setScreen(RocketScreen screen) {
     	this.screen = screen;
     }
     
+    /**
+     * @return miliseconds when this game started
+     */
     public long getStartMilis() {
     	return this.startMilis;
     }
     
+    
+    /**
+     * @param s the miliseconds to set the start time to
+     */
     public void setStartMilis(long s) {
     	this.startMilis = s;
     }
     
+    /**
+     * @return the time elapsed so far, or the duration of the game if ended
+     */
     public long getTimeMilis() {
     	if (this.hasLanded() || this.hasCrashed() || this.isOutOfFuel()) {
     		return this.finishMilis - this.startMilis;
@@ -124,14 +168,23 @@ public class RocketGame {
     
     // FINAL GAME STATES \\
     
+    /**
+     * @return if the rocket has landed
+     */
     public boolean hasLanded() {
     	return landed;
     }
-    
+
+    /**
+     * @return if the rocket has crashed
+     */
     public boolean hasCrashed() {
     	return crashed;
     }
-    
+
+    /**
+     * @return if the rocket is out of fuel
+     */
     public boolean isOutOfFuel() {
     	return outOfFuel;
     }
