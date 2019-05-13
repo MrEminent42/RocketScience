@@ -12,7 +12,7 @@ public class RocketScreen {
 	public RocketScreen(RocketGame game, double size) {
 		this.game = game;
 		
-		init(width);
+		init(size);
 	}
 	
 	public void init(double size) {
