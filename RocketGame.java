@@ -44,7 +44,7 @@ public class RocketGame {
 					update();
 				}
 			}
-    	}, refreshPerSecond/1000, refreshPerSecond/1000);
+    	}, 1000/refreshPerSecond, 1000/refreshPerSecond);
     }
     
     public void update() {
@@ -61,7 +61,7 @@ public class RocketGame {
     	// on the ground
     	if (rocket.isTouchingGround()) {
         	paused = true;
-        	updateTask.cancel();
+        	if (updateTask != null) updateTask.cancel();
 	    	// if crashed
 	    	if (rocket.getVelocityPerSecond() > crashVelocity) {
 	    		crashed = true;
@@ -75,7 +75,7 @@ public class RocketGame {
     	// out of fuel
     	else if (rocket.fuelTank <= 0) {
         	paused = true;
-        	updateTask.cancel();
+        	if (updateTask != null) updateTask.cancel();
     		outOfFuel = true;
     		screen.displayText("Out of fuel!");
     	}

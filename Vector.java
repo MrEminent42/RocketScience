@@ -41,4 +41,8 @@ public class Vector {
     public double getAngle() {
         return Math.atan(y/x);
     }
+    
+    public Vector copy() {
+    	return new Vector(this.x, this.y);
+    }
 }

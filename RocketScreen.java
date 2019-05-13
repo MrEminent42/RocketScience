@@ -6,17 +6,17 @@ public class RocketScreen {
 	public static final double rocketRectHeight = 30;
 	public static final double rocketRectWidth = 30;
 	
-	RocketGame game;
-	String currentPicture;
+	protected RocketGame game;
+	protected String currentPicture;
 	
-	public RocketScreen(RocketGame game, int width) {
+	public RocketScreen(RocketGame game, double size) {
 		this.game = game;
 		
 		init(width);
 	}
 	
-	private void init(int size) {
-		StdDraw.setCanvasSize(size, 4*size+100);
+	public void init(double size) {
+		StdDraw.setCanvasSize((int)(100*size), (int)(400*size+100));
 		
 		StdDraw.setXscale(-50, 50);
 		StdDraw.setYscale(-50, 450);
@@ -30,7 +30,7 @@ public class RocketScreen {
 		StdDraw.clear();
 		
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.line(-100, 0, 100, 0);
+		StdDraw.line(-50, 0, 50, 0);
 		StdDraw.picture(game.getRocket().getX(), game.getRocket().getY() + rocketRectHeight/2-5, "./Rocket/" + currentPicture, rocketRectWidth, rocketRectHeight);
 
 		StdDraw.text(0, 440, "TIME " + String.format("%03d", (System.currentTimeMillis() - game.getStartMilis())/1000));
