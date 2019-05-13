@@ -6,15 +6,16 @@ import java.util.TimerTask;
 public class RocketGame {
 	
 	final int crashVelocity = 10;
-	final int refreshPerSecond = 1000;
-    final double GRAVITY = -0.1/refreshPerSecond;
-    final double velPerFuelLevel = 0.025;
+	double forceMultiplier = 1.0;
+	final int screenRefreshPerSecond = 100;
+    double GRAVITY = -0.1/1000.0*forceMultiplier;
+    double forcePerFuelLevel = 1/4.0 * Math.abs(GRAVITY);
     final double startingRocketFuel = 100;
     final Vector startingRocketPos = new Vector(0, 100);
     
     private Rocket rocket;
     private RocketScreen screen;
-    private Timer updateTask;
+    private Timer screenUpdate, gameUpdate;
     private long startMilis;
     private long finishMilis = startMilis;
     
@@ -22,6 +23,14 @@ public class RocketGame {
     private boolean crashed = false;
     private boolean landed = false;
     private boolean outOfFuel = false;
+    
+    
+    // TO DEL
+    int sec = 0;
+    int applied = 0;
+    double gravsofar = 0;
+    
+    
     
     /**
      * Create a rocket game with an empty fuel queue, and a screen
@@ -67,15 +76,26 @@ public class RocketGame {
      */
     public void start() {
     	this.startMilis = System.currentTimeMillis();
-    	this.updateTask = new Timer();
-    	updateTask.scheduleAtFixedRate(new TimerTask() {
-    		@Override
-			public void run() {
-				if (!isPaused()) {
-					update();
+		if (this.screen != null) {
+			this.screenUpdate = new Timer();
+			screenUpdate.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					if (!isPaused()) {
+						screen.update();
+					}
 				}
+			}, 0, 1000/screenRefreshPerSecond);
+		}
+		
+    	this.gameUpdate = new Timer();
+    	gameUpdate.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				update();
 			}
-    	}, 1000/refreshPerSecond, 1000/refreshPerSecond);
+    	}, 1, 1);
+    	
     }
     
     /**
@@ -84,7 +104,7 @@ public class RocketGame {
     public void update() {
     	if (this.paused) return;
         rocket.update();
-        if (screen != null) screen.update();
+        if (this.screen != null) screen.update();
         
         checkFinishGame();
     }
@@ -96,8 +116,8 @@ public class RocketGame {
     	
     	// on the ground
     	if (rocket.isTouchingGround()) {
+        	cancelTasks();
         	paused = true;
-        	if (updateTask != null) updateTask.cancel();
 	    	// if crashed
 	    	if (rocket.getVelocityPerSecond() > crashVelocity) {
 	    		crashed = true;
@@ -112,13 +132,20 @@ public class RocketGame {
     	
     	// out of fuel
     	else if (rocket.fuelTank <= 0) {
+        	cancelTasks();
         	paused = true;
-        	if (updateTask != null) updateTask.cancel();
     		outOfFuel = true;
     		if (screen != null) screen.displayText("Out of fuel!");
 	    	finishMilis = System.currentTimeMillis();
     	}
     }
+    
+    public void cancelTasks() {
+    	if (this.gameUpdate != null) gameUpdate.cancel();
+    	if (this.screenUpdate != null) screenUpdate.cancel();
+    }
+    
+    // ACCESSORS \\
     
     /** 
      * @return this game's rocket
@@ -165,6 +192,15 @@ public class RocketGame {
     		return this.finishMilis - this.startMilis;
     	} else return System.currentTimeMillis() - this.startMilis;
     }
+    
+    /**
+     * sets the force multiplier (basically the speed)
+     * @param mult
+     */
+    public void setForceMultiplier(double mult) {
+    	this.forceMultiplier = mult;
+    }
+    
     
     // FINAL GAME STATES \\
     

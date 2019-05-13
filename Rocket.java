@@ -13,7 +13,7 @@ public class Rocket {
     Vector vel;
     
     ArrayList<TimedFuel> fuelQueue;
-    ArrayList<TimedFuel> pastFuel;
+    ArrayList<TimedFuel> fuelLog;
     
     /**
      * Create a rocket object
@@ -34,7 +34,8 @@ public class Rocket {
         this.accl = new Vector(0, 0);
         this.vel = new Vector(0, 0);
         this.fuelQueue = fuelQueue;
-        this.pastFuel = new ArrayList<TimedFuel>();
+        this.fuelLog = new ArrayList<TimedFuel>();
+        fuelLog.addAll(fuelQueue);
         this.fuelTank = game.startingRocketFuel;
     }
     
@@ -43,8 +44,7 @@ public class Rocket {
      */
     public void update() {
         // add gravitational force
-        this.accl.add(new Vector(0, game.GRAVITY));
-        
+        this.accl = new Vector(0, game.GRAVITY);
         // set fuel level
         if (fuelQueue.size() > 0) {
         	TimedFuel f = fuelQueue.get(0);
@@ -53,14 +53,13 @@ public class Rocket {
         		setFuelLevel(f.getFuelLevel());
         	} else if (f.isFinished()) {
         		fuelQueue.remove(f);
-        		pastFuel.add(f);
         		setFuelLevel(0);
         	}
         }
         
         // add fuel force 
-        accl.add(new Vector(0, currentFuelLevel*game.velPerFuelLevel/game.refreshPerSecond));
-        fuelTank -= currentFuelLevel/game.refreshPerSecond;
+        accl.add(new Vector(0, currentFuelLevel*game.forcePerFuelLevel));
+        fuelTank -= currentFuelLevel/1000.0;
         
         vel.add(accl);
         pos.add(vel);
@@ -99,7 +98,7 @@ public class Rocket {
      * @return velocity per second
      */
     public double getVelocityPerSecond() {
-    	return this.vel.getMag()*game.refreshPerSecond;
+    	return this.vel.getMag()*1000;
     }
     
     /**
@@ -126,7 +125,7 @@ public class Rocket {
     }
     
     public ArrayList<TimedFuel> getPastFuelLog() {
-    	return pastFuel;
+    	return fuelLog;
     }
     
 }
