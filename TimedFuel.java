@@ -1,3 +1,4 @@
+package game;
 public class TimedFuel {
     
     long startTimeMilis = -1;

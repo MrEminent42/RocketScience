@@ -1,3 +1,4 @@
+package game;
 /******************************************************************************
  *  Compilation:  javac StdAudio.java
  *  Execution:    java StdAudio
