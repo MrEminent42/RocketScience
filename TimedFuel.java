@@ -45,4 +45,11 @@ public class TimedFuel {
         return this.level;
     }
     
+    /**
+     * @return the duration in milis that 
+     */
+    public long getDuration() {
+    	return this.duration;
+    }
+    
 }
