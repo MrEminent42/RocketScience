@@ -66,26 +66,44 @@ public class Rocket {
         accl = new Vector(0,0);
     }
     
+    /**
+     * @return the x-position of the rocket (doesn't change)
+     */
     public double getX() {
     	return this.pos.x;
     }
     
+    /**
+     * @return the y-position of the rocket
+     */
     public double getY() {
     	return this.pos.y;
     }
     
-    public double getFuelTank() {
+    /**
+     * @return the amount of fuel left
+     */
+    public double getFuelLeft() {
     	return this.fuelTank;
     }
     
+    /**
+     * @return the current fuel level of the rocket
+     */
     public double getFuelLevel() {
     	return this.currentFuelLevel;
     }
     
+    /**
+     * @return velocity per second
+     */
     public double getVelocityPerSecond() {
     	return this.vel.getMag()*game.refreshPerSecond;
     }
     
+    /**
+     * @return velocity per refresh of the screen
+     */
     public double getVelocityPerRefresh() {
     	return this.vel.getMag();
     }
