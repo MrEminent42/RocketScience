@@ -16,6 +16,7 @@ public class RocketGame {
     private RocketScreen screen;
     private Timer updateTask;
     private long startMilis;
+    private long finishMilis = startMilis;
     
     private boolean paused = false;
     private boolean crashed = false;
@@ -26,10 +27,21 @@ public class RocketGame {
     	this(new ArrayList<TimedFuel>());
     }
     
+    public RocketGame(boolean screen) {
+    	this(new ArrayList<TimedFuel>(), screen);
+    }
+    
     public RocketGame(ArrayList<TimedFuel> fuelQueue) {
-        this.rocket = new Rocket(fuelQueue);
-        this.screen = new RocketScreen(this, 100);
-        
+    	this(fuelQueue, true);
+    }
+    
+    public RocketGame(ArrayList<TimedFuel> fuelQueue, boolean screen) {
+        this.rocket = new Rocket(this, fuelQueue);
+        if (screen) initScreen();
+    }
+    
+    private void initScreen() {
+        this.screen = new RocketScreen(this, 1);
         this.screen.update();
         this.screen.displayText("Click to play");
     }
@@ -70,6 +82,8 @@ public class RocketGame {
 	    		landed = true;
 	    		screen.displayText("You landed!");
 	    	}
+	    	
+	    	finishMilis = System.currentTimeMillis();
     	}
     	
     	// out of fuel
@@ -78,8 +92,8 @@ public class RocketGame {
         	if (updateTask != null) updateTask.cancel();
     		outOfFuel = true;
     		screen.displayText("Out of fuel!");
+	    	finishMilis = System.currentTimeMillis();
     	}
-    	
     }
     
     public Rocket getRocket() {
@@ -95,7 +109,17 @@ public class RocketGame {
     }
     
     public long getStartMilis() {
-    	return this.getStartMilis();
+    	return this.startMilis;
+    }
+    
+    public void setStartMilis(long s) {
+    	this.startMilis = s;
+    }
+    
+    public long getTimeMilis() {
+    	if (this.hasLanded() || this.hasCrashed() || this.isOutOfFuel()) {
+    		return this.finishMilis - this.startMilis;
+    	} else return System.currentTimeMillis() - this.startMilis;
     }
     
     // FINAL GAME STATES \\
