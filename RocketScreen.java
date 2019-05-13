@@ -32,10 +32,10 @@ public class RocketScreen {
 		StdDraw.line(-100, 0, 100, 0);
 		StdDraw.picture(game.getRocket().getX(), game.getRocket().getY() + rocketRectHeight/2-5, "./Rocket/" + currentPicture, rocketRectWidth, rocketRectHeight);
 
-		StdDraw.text(0, 440, "TIME " + String.format("%03d", (System.currentTimeMillis() - game.startMilis)/1000));
+		StdDraw.text(0, 440, "TIME " + String.format("%03d", (System.currentTimeMillis() - game.getStartMilis())/1000));
 		StdDraw.setPenColor((game.getRocket().fuelTank > 50) ? StdDraw.BLACK : (game.getRocket().fuelTank > 25) ? StdDraw.PRINCETON_ORANGE : StdDraw.RED);
 		StdDraw.text(0, 425, "FUEL " + String.format("%03d", (int)(game.getRocket().fuelTank)));
-		StdDraw.setPenColor((game.getRocket().getVelocityPerSecond() > 35) ? StdDraw.RED : (game.getRocket().getVelocityPerSecond() <= RocketGame.crashVelocity) ? StdDraw.GREEN :StdDraw.BLACK);
+		StdDraw.setPenColor((game.getRocket().getVelocityPerSecond() > 35) ? StdDraw.RED : (game.getRocket().getVelocityPerSecond() <= game.crashVelocity) ? StdDraw.GREEN :StdDraw.BLACK);
 		StdDraw.text(0, 410, "VEL   " + String.format("%03d", (int)(game.getRocket().getVelocityPerSecond())));
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.text(0, 395, "LEVL " + String.format("%03d", (int)(game.getRocket().fuelLevel)));
@@ -45,7 +45,7 @@ public class RocketScreen {
 		checkButtonPress();
 	}
 	
-	private void updatePictureFile() {
+	public void updatePictureFile() {
 		// scaling the 9 levels to 6 pictures (??)
 		int d = (int) (6 * game.getRocket().fuelLevel / 10);
 		

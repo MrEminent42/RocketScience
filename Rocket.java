@@ -3,7 +3,9 @@ import java.util.ArrayList;
 
 public class Rocket {
     
-	double fuelTank = RocketGame.startingRocketFuel;
+	RocketGame game;
+	
+	double fuelTank = game.startingRocketFuel;
 	double fuelLevel = 0;
 	
     Vector pos;
@@ -12,12 +14,13 @@ public class Rocket {
     
     ArrayList<TimedFuel> fuelQueue;
     
-    public Rocket() {
-        this(new ArrayList<TimedFuel>());
+    public Rocket(RocketGame parent) {
+        this(parent, new ArrayList<TimedFuel>());
     }
     
-    public Rocket(ArrayList<TimedFuel> fuelQueue) {
-        this.pos = RocketGame.startingRocketPos.copy();
+    public Rocket(RocketGame parent, ArrayList<TimedFuel> fuelQueue) {
+    	this.game = parent;
+        this.pos = game.startingRocketPos.copy();
         this.accl = new Vector(0, 0);
         this.vel = new Vector(0, 0);
         this.fuelQueue = fuelQueue;
@@ -25,7 +28,7 @@ public class Rocket {
     
     public void update() {
         // add gravitational force
-        this.accl.add(new Vector(0, RocketGame.GRAVITY));
+        this.accl.add(new Vector(0, game.GRAVITY));
         
         // set fuel level
         if (fuelQueue.size() > 0) {
@@ -39,8 +42,9 @@ public class Rocket {
         	}
         }
         
-        accl.add(new Vector(0, fuelLevel*RocketGame.velPerFuelLevel/RocketGame.refreshPerSecond));
-        fuelTank -= fuelLevel/RocketGame.refreshPerSecond;
+        // add fuel force 
+        accl.add(new Vector(0, fuelLevel*game.velPerFuelLevel/game.refreshPerSecond));
+        fuelTank -= fuelLevel/game.refreshPerSecond;
         
         vel.add(accl);
         pos.add(vel);
@@ -64,7 +68,7 @@ public class Rocket {
     }
     
     public double getVelocityPerSecond() {
-    	return this.vel.getMag()*RocketGame.refreshPerSecond;
+    	return this.vel.getMag()*game.refreshPerSecond;
     }
     
     public double getVelocityPerRefresh() {

@@ -5,12 +5,12 @@ import java.util.TimerTask;
 
 public class RocketGame {
 	
-	public static final int crashVelocity = 3;
-	public static final int refreshPerSecond = 1000;
-    public static final double GRAVITY = -0.01/((double) refreshPerSecond);
-    public static final double velPerFuelLevel = 0.0025;
-    public static final double startingRocketFuel = 200;
-    public static final Vector startingRocketPos = new Vector(0, 100);
+	final int crashVelocity = 10;
+	final int refreshPerSecond = 1000;
+    final double GRAVITY = -0.1/refreshPerSecond;
+    final double velPerFuelLevel = 0.025;
+    final double startingRocketFuel = 100;
+    final Vector startingRocketPos = new Vector(0, 100);
     
     private Rocket rocket;
     private RocketScreen screen;
