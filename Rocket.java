@@ -5,7 +5,7 @@ public class Rocket {
     
 	RocketGame game;
 	
-	double fuelTank = game.startingRocketFuel;
+	double fuelTank = 0;
 	double currentFuelLevel = 0;
 	
     Vector pos;
@@ -35,6 +35,7 @@ public class Rocket {
         this.vel = new Vector(0, 0);
         this.fuelQueue = fuelQueue;
         this.pastFuel = new ArrayList<TimedFuel>();
+        this.fuelTank = game.startingRocketFuel;
     }
     
     /**
