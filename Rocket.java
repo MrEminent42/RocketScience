@@ -13,6 +13,7 @@ public class Rocket {
     Vector vel;
     
     ArrayList<TimedFuel> fuelQueue;
+    ArrayList<TimedFuel> pastFuel;
     
     public Rocket(RocketGame parent) {
         this(parent, new ArrayList<TimedFuel>());
@@ -24,6 +25,7 @@ public class Rocket {
         this.accl = new Vector(0, 0);
         this.vel = new Vector(0, 0);
         this.fuelQueue = fuelQueue;
+        this.pastFuel = new ArrayList<TimedFuel>();
     }
     
     public void update() {
@@ -38,6 +40,7 @@ public class Rocket {
         		setFuelLevel(f.getLevel());
         	} else if (f.isFinished()) {
         		fuelQueue.remove(f);
+        		pastFuel.add(f);
         		setFuelLevel(0);
         	}
         }
@@ -89,6 +92,10 @@ public class Rocket {
     
     public void setFuelLevel(int level) {
     	this.fuelLevel = level;
+    }
+    
+    public ArrayList<TimedFuel> getPastFuelLog() {
+    	return pastFuel;
     }
     
 }
