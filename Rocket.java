@@ -98,7 +98,7 @@ public class Rocket {
      * @return velocity per second
      */
     public double getVelocityPerSecond() {
-    	return this.vel.getMag()*1000;
+    	return this.vel.getMag()*100;
     }
     
     /**

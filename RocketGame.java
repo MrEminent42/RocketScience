@@ -16,7 +16,8 @@ public class RocketGame {
     
     private Rocket rocket;
     private RocketScreen screen;
-    private Timer screenUpdate, gameUpdate;
+    private Timer gameUpdate;
+    private int iterations = 0;
     private long startMilis;
     private long finishMilis = startMilis;
     
@@ -24,14 +25,6 @@ public class RocketGame {
     private boolean crashed = false;
     private boolean landed = false;
     private boolean outOfFuel = false;
-    
-    
-    // TO DEL
-    int sec = 0;
-    int applied = 0;
-    double gravsofar = 0;
-    
-    
     
     /**
      * Create a rocket game with an empty fuel queue, and a screen
@@ -76,26 +69,18 @@ public class RocketGame {
      * Run the game
      */
     public void start() {
-    	this.startMilis = System.currentTimeMillis();
-		if (this.screen != null) {
-			this.screenUpdate = new Timer();
-			screenUpdate.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					if (!isPaused()) {
-						screen.update();
-					}
-				}
-			}, 0, 1000/screenRefreshPerSecond);
-		}
-		
     	this.gameUpdate = new Timer();
     	gameUpdate.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				update();
+				iterations++;
+				if (iterations == iterationsUntilRefreshScreen) {
+					iterations = 0;
+					screen.update();
+				}
 			}
-    	}, 1, 1);
+    	}, 0, iterationMilis);
     	
     }
     
@@ -143,7 +128,6 @@ public class RocketGame {
     
     public void cancelTasks() {
     	if (this.gameUpdate != null) gameUpdate.cancel();
-    	if (this.screenUpdate != null) screenUpdate.cancel();
     }
     
     // ACCESSORS \\
