@@ -69,6 +69,7 @@ public class RocketGame {
      * Run the game
      */
     public void start() {
+    	this.startMilis = System.currentTimeMillis();
     	this.gameUpdate = new Timer();
     	gameUpdate.scheduleAtFixedRate(new TimerTask() {
 			@Override
