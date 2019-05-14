@@ -25,6 +25,7 @@ public class RocketGame {
     private boolean crashed = false;
     private boolean landed = false;
     private boolean outOfFuel = false;
+    private boolean outOfBounds = false;
     
     /**
      * Create a rocket game with an empty fuel queue, and a screen
@@ -113,22 +114,25 @@ public class RocketGame {
 	    		landed = true;
 	    		if (screen != null) screen.displayText("You landed!");
 	    	}
-	    	
-	    	finishMilis = System.currentTimeMillis();
     	}
     	
     	// out of fuel
     	else if (rocket.fuelTank <= 0) {
         	cancelTasks();
-        	paused = true;
     		outOfFuel = true;
     		if (screen != null) screen.displayText("Out of fuel!");
-	    	finishMilis = System.currentTimeMillis();
+    	}
+    	
+    	else if (rocket.getY() > 500) {
+    		cancelTasks();
+    		outOfBounds = true;
+    		if (screen != null) screen.displayText("Out of bounds!");
     	}
     }
     
     public void cancelTasks() {
     	if (this.gameUpdate != null) gameUpdate.cancel();
+    	finishMilis = System.currentTimeMillis();
     }
     
     // ACCESSORS \\
@@ -174,7 +178,7 @@ public class RocketGame {
      * @return the time elapsed so far, or the duration of the game if ended
      */
     public long getTimeMilis() {
-    	if (this.hasLanded() || this.hasCrashed() || this.isOutOfFuel()) {
+    	if (this.hasEnded()) {
     		return this.finishMilis - this.startMilis;
     	} else return System.currentTimeMillis() - this.startMilis;
     }
@@ -200,7 +204,7 @@ public class RocketGame {
      */
     public void setPreferences(int crashVelocity, 
     		double forceMultiplier, 
-    		double startingRocketFuel, int startingRocketPos) {
+    		double startingRocketFuel, double startingRocketPos) {
     	this.crashVelocity = crashVelocity;
     	this.forceMultiplier = forceMultiplier;
     	this.startingRocketFuel = startingRocketFuel;
@@ -208,6 +212,13 @@ public class RocketGame {
     }
     
     // FINAL GAME STATES \\
+    
+    /**
+     * @return if the game has ended
+     */
+    public boolean hasEnded() {
+    	return (this.hasCrashed() || this.hasLanded() || this.isOutOfFuel() || this.isOutOfBounds());
+    }
     
     /**
      * @return if the rocket has landed
@@ -228,6 +239,13 @@ public class RocketGame {
      */
     public boolean isOutOfFuel() {
     	return outOfFuel;
+    }
+    
+    /**
+     * @return if the rocket is too high (y > 500)
+     */
+    public boolean isOutOfBounds() {
+    	return this.outOfBounds;
     }
     
     
