@@ -1,10 +1,10 @@
-package game;
+	package game;
 import java.awt.event.KeyEvent;
 
 public class RocketScreen {
 	
-	public static final double rocketRectHeight = 30;
-	public static final double rocketRectWidth = 30;
+	public final double rocketRectHeight = 30;
+	public final double rocketRectWidth = 30;
 	
 	protected RocketGame game;
 	protected String currentPicture;

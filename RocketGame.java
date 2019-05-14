@@ -5,13 +5,14 @@ import java.util.TimerTask;
 
 public class RocketGame {
 	
-	final int crashVelocity = 10;
-	double forceMultiplier = 1.0;
-	final int screenRefreshPerSecond = 100;
-    double GRAVITY = -0.1/1000.0*forceMultiplier;
-    double forcePerFuelLevel = 1/4.0 * Math.abs(GRAVITY);
-    final double startingRocketFuel = 100;
-    final Vector startingRocketPos = new Vector(0, 100);
+	int crashVelocity = 10;
+	double forceMultiplier = 10.0;
+	final int iterationMilis = 10;
+	final int iterationsUntilRefreshScreen = 3;
+	double GRAVITY = -0.1/1000.0*forceMultiplier;
+	double forcePerFuelLevel = 1/4.0 * Math.abs(GRAVITY);
+	double startingRocketFuel = 100;
+	Vector startingRocketPos = new Vector(0, 100);
     
     private Rocket rocket;
     private RocketScreen screen;
@@ -201,6 +202,25 @@ public class RocketGame {
     	this.forceMultiplier = mult;
     }
     
+    public double getStartingFuel() {
+    	return this.startingRocketFuel;
+    }
+    
+    /** Set preferences
+     * @param crashVelocity threshold for crashing default 10
+     * @param forceMultiplier multiply all forces default 1
+     * @param screenRefreshPerSecond refreshes per second default 100
+     * @param startingRocketFuel starting rocket fuel default 100
+     * @param startingRocketPos starting rocket y-pos default 10
+     */
+    public void setPreferences(int crashVelocity, 
+    		double forceMultiplier, int screenRefreshPerSecond, 
+    		double startingRocketFuel, int startingRocketPos) {
+    	this.crashVelocity = crashVelocity;
+    	this.forceMultiplier = forceMultiplier;
+    	this.startingRocketFuel = startingRocketFuel;
+    	this.startingRocketPos = new Vector(0, startingRocketPos);
+    }
     
     // FINAL GAME STATES \\
     
