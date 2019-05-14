@@ -199,7 +199,7 @@ public class RocketGame {
      * @param startingRocketPos starting rocket y-pos default 10
      */
     public void setPreferences(int crashVelocity, 
-    		double forceMultiplier, int screenRefreshPerSecond, 
+    		double forceMultiplier, 
     		double startingRocketFuel, int startingRocketPos) {
     	this.crashVelocity = crashVelocity;
     	this.forceMultiplier = forceMultiplier;
