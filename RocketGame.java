@@ -6,10 +6,10 @@ import java.util.TimerTask;
 public class RocketGame {
 	
 	int crashVelocity = 10;
-	double forceMultiplier = 10.0;
+	double forceMultiplier = 1.0;
 	final int iterationMilis = 10;
 	final int iterationsUntilRefreshScreen = 3;
-	double GRAVITY = -0.1/1000.0*forceMultiplier;
+	double GRAVITY = -0.1/100.0*forceMultiplier;
 	double forcePerFuelLevel = 1/4.0 * Math.abs(GRAVITY);
 	double startingRocketFuel = 100;
 	Vector startingRocketPos = new Vector(0, 100);
